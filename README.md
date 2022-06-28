@@ -2,7 +2,7 @@
 Code for reproducing experiments of "Multi-agent synchronization of homogeneous network with incremental stability", section VI.\
 The 'find_P.py' file generates and trains the metric network according to the contraction conditions.\
 The 'find_alpha.py' file generates and trains the alpha network according to the integrability condition.\
-The 'test_multiagent.py' file loads the alpha network and tests the proposed controller on a network of chaotic Lorenz attractors.\
+The 'test_multiagent.py' file loads the alpha network and tests the proposed controller on a network of chaotic Lorenz attractors.
 
 **Arguments for launching the code:**\
 *find_P*: \
