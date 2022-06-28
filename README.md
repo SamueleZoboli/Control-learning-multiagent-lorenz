@@ -22,4 +22,4 @@ The 'test_multiagent.py' file loads the alpha network and tests the proposed con
         --learning_rate : learning rate, scheduling follows cosineannealing \
         --log_name : name of log folder, which will be stored in 'runs/' folder\
 *test_multiagent*: \
-        --alpha_path : path to the alpha network\
+        --alpha_path : path to the alpha network
