@@ -77,13 +77,12 @@ if __name__ == "__main__":
     writer = SummaryWriter(log_dir=log_dir, comment=comment, filename_suffix=suff)
 
     # create models folder if needed
-    model_dir = log_dir + '/models'
+    model_dir = log_dir + '/models/'
     exists = os.path.exists(model_dir)
     if not exists:
         os.makedirs(model_dir)
 
     # model and training
-
     model = create_mlp(in_dim=in_dim, out_dim=out_dim, arch=arch, activ=activ['layer'],
                        out_activ=out_activ['layer']).to(device)
 
@@ -127,7 +126,7 @@ if __name__ == "__main__":
             train_losses.append(loss.item())
 
         # save model for checkpoint
-        torch.save(model, model_dir +  '/epoch_' + str(epoch) + '.pt')
+        torch.save(model, model_dir +  'epoch_' + str(epoch) + '.pt')
 
         # logs
         writer.add_scalar("lr/train", scheduler.get_last_lr()[0], epoch)
@@ -137,7 +136,7 @@ if __name__ == "__main__":
 
         with torch.no_grad():
             for i, (x, dadx) in enumerate(test_loader):
-                assert (i == 0)  # ensure I pick all the test at once dataset
+                assert (i == 0)  # ensure I pick all the test dataset at once
                 x = x.to(device)
                 dadx = dadx.to(device)
                 jac = torch.zeros((x.shape[0], dyn_sys.m, dyn_sys.n)).to(device)

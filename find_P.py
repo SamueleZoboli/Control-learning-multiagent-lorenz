@@ -37,9 +37,8 @@ class System():
         self.sigma = 10
         self.rho = 28
         self.beta = 2.667
-        self.dt = .01
         self.n = 3
-        self.m = 5
+        self.m = 6
         self.learning_metric = True
         self.learning_policy = False
 
@@ -107,19 +106,19 @@ class System():
 
 
 def calc_P(actions, n, device):
-    '''Generate P(x° from NN output
+    '''Generate P(x) from NN output
     '''
     P = torch.zeros((actions.shape[0], n, n)).to(device)
 
-    P[:, 0, 0] = 1
-    P[:, 0, 1] = actions[:, 0]
+    P[:, 0, 0] = actions[:, 0]
+    P[:, 0, 1] = actions[:, 1]
     P[:, 1, 0] = P[:, 0, 1]
-    P[:, 0, 2] = actions[:, 1]
+    P[:, 0, 2] = actions[:, 2]
     P[:, 2, 0] = P[:, 0, 2]
-    P[:, 1, 1] = actions[:, 2]
-    P[:, 1, 2] = actions[:, 3]
+    P[:, 1, 1] = actions[:, 3]
+    P[:, 1, 2] = actions[:, 4]
     P[:, 2, 1] = P[:, 1, 2]
-    P[:, 2, 2] = actions[:, 4]
+    P[:, 2, 2] = actions[:, 5]
 
     return P.to(device)
 
@@ -137,28 +136,28 @@ def calc_dPdx(net, s, f, g, high, m, n, device):
     dPdxg_vec = dadx @ g
     dPdxg = torch.zeros((s.shape[0], n, n)).to(device)
 
-    dPdxg[:, 0, 0] = 1
-    dPdxg[:, 0, 1] = dPdxg_vec[:, 0, 0]
+    dPdxg[:, 0, 0] = dPdxg_vec[:, 0, 0]
+    dPdxg[:, 0, 1] = dPdxg_vec[:, 1, 0]
     dPdxg[:, 1, 0] = dPdxg[:, 0, 1]
-    dPdxg[:, 0, 2] = dPdxg_vec[:, 1, 0]
+    dPdxg[:, 0, 2] = dPdxg_vec[:, 2, 0]
     dPdxg[:, 2, 0] = dPdxg[:, 0, 2]
-    dPdxg[:, 1, 1] = dPdxg_vec[:, 2, 0]
-    dPdxg[:, 1, 2] = dPdxg_vec[:, 3, 0]
+    dPdxg[:, 1, 1] = dPdxg_vec[:, 3, 0]
+    dPdxg[:, 1, 2] = dPdxg_vec[:, 4, 0]
     dPdxg[:, 2, 1] = dPdxg[:, 1, 2]
-    dPdxg[:, 2, 2] = dPdxg_vec[:, 4, 0]
+    dPdxg[:, 2, 2] = dPdxg_vec[:, 5, 0]
 
     dPdxf_vec = dadx @ f
     dPdxf = torch.zeros((s.shape[0], n, n)).to(device)
 
-    dPdxf[:, 0, 0] = 1
-    dPdxf[:, 0, 1] = dPdxf_vec[:, 0, 0]
+    dPdxf[:, 0, 0] = dPdxf_vec[:, 0, 0]
+    dPdxf[:, 0, 1] = dPdxf_vec[:, 1, 0]
     dPdxf[:, 1, 0] = dPdxf[:, 0, 1]
-    dPdxf[:, 0, 2] = dPdxf_vec[:, 1, 0]
+    dPdxf[:, 0, 2] = dPdxf_vec[:, 2, 0]
     dPdxf[:, 2, 0] = dPdxf[:, 0, 2]
-    dPdxf[:, 1, 1] = dPdxf_vec[:, 2, 0]
-    dPdxf[:, 1, 2] = dPdxf_vec[:, 3, 0]
+    dPdxf[:, 1, 1] = dPdxf_vec[:, 3, 0]
+    dPdxf[:, 1, 2] = dPdxf_vec[:, 4, 0]
     dPdxf[:, 2, 1] = dPdxf[:, 1, 2]
-    dPdxf[:, 2, 2] = dPdxf_vec[:, 4, 0]
+    dPdxf[:, 2, 2] = dPdxf_vec[:, 5, 0]
 
     return dPdxg.to(device), dPdxf.to(device)
 
@@ -271,7 +270,7 @@ if __name__ == "__main__":
     writer = SummaryWriter(log_dir=log_dir, comment=comment, filename_suffix=suff)
 
     # create models folder if needed
-    model_dir = log_dir + '/models'
+    model_dir = log_dir + '/models/'
     exists = os.path.exists(model_dir)
     if not exists:
         os.makedirs(model_dir)
@@ -341,7 +340,7 @@ if __name__ == "__main__":
             lowp_buffer.append(lowp.item())
 
         # save model for checkpoint
-        torch.save(model, model_dir +  '_epoch_' + str(epoch) + '.pt')
+        torch.save(model, model_dir +  'epoch_' + str(epoch) + '.pt')
 
         # logs
         writer.add_scalar("lr/train", scheduler.get_last_lr()[0], epoch)

@@ -12,14 +12,13 @@ class MultiSys():
     def __init__(self, n_agents: int):
         self.N = n_agents
         self.n = 3
-        self.m = 5
+        self.m = 6
         self.sigma = 10
         self.rho = 28
         self.beta = 2.667
-        self.dt = .01
-        self.g = np.array([[0.], [1.], [0.]])
+        self.dt = .001
         self.state = self.reset()
-        self.k = 4
+        self.k = 5
         self.L = np.array([[ 0, 0, 0, 0, 0, 0],
                            [-1, 3, -1, 0, -1, 0],
                            [0, -1, 3, -1, -1, 0],
@@ -77,7 +76,7 @@ if __name__ == '__main__':
     model_path = args.alpha_path
 
     n_agents = 6
-    n_steps = 800
+    n_steps = 600
 
     model = torch.load(model_path)
     env = MultiSys(n_agents = n_agents)
@@ -91,7 +90,7 @@ if __name__ == '__main__':
     with torch.no_grad():
         for i in range(n_steps):
             # add noise
-            noise =  0.5 * np.random.randn(x.shape[0], x.shape[1])
+            noise =  .2 * np.random.randn(x.shape[0], x.shape[1])
             x_noise = x + noise
             alpha = model(torch.from_numpy(x_noise.astype(np.float32))).numpy()
             u = -env.k * env.L @ alpha
@@ -115,6 +114,7 @@ if __name__ == '__main__':
         ax2.plot(t, traj[:,i,1],label = r'$a_'+str(i+1)+'$', color = color[i], linewidth = linewidth)
     for i in range(n_agents):
         ax3.plot(t, traj[:,i,2],label = r'$a_'+str(i+1)+'$', color = color[i], linewidth = linewidth)
+
 
     fontsize = 20
 
