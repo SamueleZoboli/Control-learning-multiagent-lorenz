@@ -45,7 +45,7 @@ class System():
     def learn_metric(self):
         self.learning_metric = True
         self.learning_policy = False
-        self.m = 5
+        self.m = 6
         return
 
     def learn_policy(self):
