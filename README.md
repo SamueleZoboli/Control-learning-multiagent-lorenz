@@ -29,7 +29,7 @@ python find_alpha.py --net 64,64 --activ tanh --dataset_size 10000 --batch_size 
 ### **Test the Multi-Agent Controller (`test_multiagent.py`)**
 
 ```bash
-python test_multiagent.py --alpha_path path/to/trained_alpha.pth
+python test_multiagent.py --alpha_path <path-to>/trained_alpha.pth
 ```
 
 ---
